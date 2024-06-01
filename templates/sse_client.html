@@ -1,0 +1,31 @@
+<!-- templates/sse_client.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSE Client</title>
+</head>
+<body>
+    <h1>Server-Sent Events</h1>
+    <div id="sse-data"></div>
+
+    <script>
+        const eventSource = new EventSource('/sse/');
+
+        eventSource.onmessage = function(event) {
+            const dataDiv = document.getElementById('sse-data');
+            const data = JSON.parse(event.data);
+            dataDiv.innerHTML = '';
+            data.forEach(item => {
+                dataDiv.innerHTML += `<p>Name: ${item.name}, Value: ${item.value}</p>`;
+            });
+        };
+
+        eventSource.onerror = function(event) {
+            console.error("EventSource failed:", event);
+        };
+    </script>
+</body>
+</html>
